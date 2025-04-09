@@ -1,0 +1,4 @@
+django
+json
+phonenumbers
+email-validator

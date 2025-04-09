@@ -1,0 +1,35 @@
+# Django
+app/migrations/*
+
+# DB
+*.sqlite3
+
+# Python
+__pycache__
+.venv*
+/env*/
+venv/
+.cache
+.mypy_cache/
+
+# configs
+.*.ini
+*.ini
+
+# configs
+.*.ini
+*.ini
+
+# Editors
+*.sublime-workspace
+*.sublime-project # unless most use Sublime
+.vscode
+*.code-workspace
+.idea
+*.swp
+.*.sw?
+*.sw?
+*~
+
+# Misc
+.DS_Store

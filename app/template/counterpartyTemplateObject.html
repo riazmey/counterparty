@@ -1,0 +1,9 @@
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {{ inline_formset.management_form }}
+    {% for form in inline_formset %}
+        {{ form.as_p }}
+    {% endfor %}
+    <button type="submit">Сохранить</button>
+</form>
