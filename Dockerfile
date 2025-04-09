@@ -13,9 +13,9 @@ RUN set -eux; \
   ;
 
 WORKDIR /app
-RUN git clone --branch master https://github.com/riazmey/counterparty.git
+RUN git clone --branch main https://github.com/riazmey/counterparty.git
 
-WORKDIR /app/fuel_cards
+WORKDIR /app/counterparty
 RUN pip3 install -r requirements.txt
 
 #CMD ["python", "./fuel_cards/manage.py", "runserver", "0.0.0.0:8000"]
