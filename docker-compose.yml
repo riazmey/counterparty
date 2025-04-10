@@ -1,0 +1,40 @@
+services:
+
+  psql:
+    container_name: counterparty-psql
+    image: postgres:latest
+    shm_size: 128mb
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - '5432:5432'
+    volumes:
+      - /data/counterparty-psql:/var/lib/postgresql/data/
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U ${POSTGRES_USER}' ]
+      interval: 1s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+
+  app:
+    container_name: counterparty-app
+    image: riazmey/counterparty:latest
+    ports:
+      - '8000:8000'
+    volumes:
+      - /data/counterparty-app/migrations:/app/counterparty/app/migrations/
+    command: '/app/counterparty/docker-entrypoint.sh.py'
+    healthcheck:
+      test: [ 'CMD', 'curl --fail http://localhost:8000/ || exit 1' ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    depends_on:
+      - psql

@@ -16,9 +16,8 @@ venv/
 .*.ini
 *.ini
 
-# configs
-.*.ini
-*.ini
+# settings
+*core/settings/local.py
 
 # Editors
 *.sublime-workspace
