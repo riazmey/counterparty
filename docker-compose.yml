@@ -2,7 +2,7 @@ services:
 
   psql:
     container_name: counterparty-psql
-    image: postgres:latest
+    image: postgres:alpine
     shm_size: 128mb
     environment:
       - POSTGRES_DB=${DATABASE_DB}
@@ -10,9 +10,10 @@ services:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - PGDATA=/var/lib/postgresql/data/pgdata
     ports:
-      - '5432:5432'
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
     volumes:
       - /data/counterparty-psql:/var/lib/postgresql/data/
+    command: ["psql", "-U", "${DATABASE_USER}", "-p", "${DATABASE_PORT}"]
     healthcheck:
       test: [ 'CMD-SHELL', 'pg_isready -U ${DATABASE_USER}' ]
       interval: 1s

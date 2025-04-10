@@ -1,19 +1,14 @@
-#FROM python:3.13
-FROM python:latest-alpine
+FROM python:3.13-alpine
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN set -eux
-RUN apt-get update -y
-RUN apt-get upgrade -y
-RUN apt-get install -y \
-  libpq-dev \
-  gcc \
-  curl \
-  git \
-  nano \
-  ;
+RUN apk update
+RUN apk add libpq
+RUN apk add --virtual .build-deps gcc python3-dev musl-dev postgresql-dev
+RUN apk add curl git nano
+
+RUN pip install --upgrade pip
 
 WORKDIR /app
 RUN git clone --branch main https://github.com/riazmey/counterparty.git
