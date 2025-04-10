@@ -35,7 +35,8 @@ SECRET_KEY = getenv('DJANGO_SECRET_KEY', get_random_secret_key())
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = getenv('DJANGO_DEBUG', True)
 
-ALLOWED_HOSTS = getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1').split(',')
+ALLOWED_HOSTS = getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+print(f'ALLOWED_HOSTS = {ALLOWED_HOSTS}')
 
 # Database
 DATABASES = {
