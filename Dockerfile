@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED 1
 RUN apk update
 RUN apk add libpq
 RUN apk add --virtual .build-deps gcc python3-dev musl-dev postgresql-dev
-RUN apk add curl git nano
+RUN apk add bash curl git nano
 
 RUN pip install --upgrade pip
 

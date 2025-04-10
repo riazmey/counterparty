@@ -2,7 +2,7 @@ services:
 
   psql:
     container_name: counterparty-psql
-    image: postgres:alpine
+    image: postgres:latest
     shm_size: 128mb
     environment:
       - POSTGRES_DB=${DATABASE_DB}
