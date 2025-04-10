@@ -1,6 +1,6 @@
 services:
 
-  psql:
+  counterparty-psql:
     container_name: counterparty-psql
     image: postgres:latest
     shm_size: 128mb
@@ -23,7 +23,7 @@ services:
     tty: true
     stdin_open: true
 
-  app:
+  counterparty-app:
     container_name: counterparty-app
     image: riazmey/counterparty:latest
     ports:
@@ -38,4 +38,4 @@ services:
       retries: 5
     restart: unless-stopped
     depends_on:
-      - psql
+      - counterparty-psql
