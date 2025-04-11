@@ -4,6 +4,8 @@ services:
     container_name: counterparty-app
     hostname: 'counterparty-app.${NETWORK_DOMAINNAME}'
     image: riazmey/counterparty:latest
+    build:
+      context: .
     volumes:
       - /data/counterparty-app/migrations:/app/counterparty/app/migrations/
       - /data/counterparty-app/settings:/app/counterparty/core/settings/
