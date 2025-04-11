@@ -16,5 +16,4 @@ RUN git clone --branch main https://github.com/riazmey/counterparty.git
 WORKDIR /app/counterparty
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 CMD ["bash"]

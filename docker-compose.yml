@@ -1,18 +1,46 @@
 services:
 
+  counterparty-app:
+    container_name: counterparty-app
+    hostname: 'counterparty-app.${NETWORK_DOMAINNAME}'
+    image: riazmey/counterparty:latest
+    volumes:
+      - /data/counterparty-app/migrations:/app/counterparty/app/migrations/
+      - /data/counterparty-app/settings:/app/counterparty/core/settings/
+    networks:
+      local_network:
+        ipv4_address: ${NETWORK_IP_APP}
+    ports:
+      - '8000:8000'
+    command: '/app/counterparty/docker-entrypoint.sh'
+    healthcheck:
+      test: [ 'CMD', 'curl --fail http://localhost:8000/ || exit 1' ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    depends_on:
+      - counterparty-psql
+
   counterparty-psql:
     container_name: counterparty-psql
+    hostname: 'counterparty-psql.${NETWORK_DOMAINNAME}'
     image: postgres:latest
     shm_size: 128mb
     environment:
+      - LANG=ru_RU.utf8
+      - POSTGRES_INITDB_ARGS=--locale-provider=icu --icu-locale=ru-RU
       - POSTGRES_DB=${DATABASE_DB}
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - PGDATA=/var/lib/postgresql/data/pgdata
+    networks:
+      local_network:
+        ipv4_address: ${NETWORK_IP_PSQL}
     ports:
       - "${DATABASE_PORT}:${DATABASE_PORT}"
     volumes:
-      - /data/counterparty-psql:/var/lib/postgresql/data/
+      - /data/counterparty-psql:/var/lib/postgresql/data/pgdata
     command: [ "psql", "-U", "${DATABASE_USER}", "-p", "${DATABASE_PORT}" ]
     healthcheck:
       test: [ 'CMD-SHELL', 'pg_isready -U ${DATABASE_USER}' ]
@@ -23,19 +51,12 @@ services:
     tty: true
     stdin_open: true
 
-  counterparty-app:
-    container_name: counterparty-app
-    image: riazmey/counterparty:latest
-    ports:
-      - '8000:8000'
-    volumes:
-      - /data/counterparty-app/migrations:/app/counterparty/app/migrations/
-    command: '/app/counterparty/docker-entrypoint.sh'
-    healthcheck:
-      test: [ 'CMD', 'curl --fail http://localhost:8000/ || exit 1' ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
-    depends_on:
-      - counterparty-psql
+networks:
+  local_network:
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      config:
+        - subnet: ${NETWORK_SUBNET}
+          gateway: ${NETWORK_GATEWAY}
