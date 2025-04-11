@@ -30,12 +30,17 @@ services:
     image: postgres:latest
     shm_size: 128mb
     environment:
-      - LANG=ru_RU.utf8
-      - POSTGRES_INITDB_ARGS=--locale-provider=icu --icu-locale=ru-RU
       - POSTGRES_DB=${DATABASE_DB}
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_INITDB_ARGS='--data-checksums --locale-provider=icu --icu-locale=ru-RU'
+      - LANG=ru_RU.utf8
+      - LANGUAGE=ru_RU.UTF-8
+      - LC_ALL=ru_RU.UTF-8
+      - LC_COLLATE=ru_RU.UTF-8
+      - LC_CTYPE=ru_RU.UTF-8
+      - TZ=Europe/Moscow
     networks:
       local_network:
         ipv4_address: ${NETWORK_IP_PSQL}
