@@ -7,8 +7,8 @@ services:
     build:
       context: .
     volumes:
-      - /data/counterparty-app/migrations:/app/counterparty/app/migrations/
-      - /data/counterparty-app/settings:/app/counterparty/core/settings/
+      - /data/counterparty-app/migrations:/app/counterparty/app/migrations/:rw
+      - /data/counterparty-app/settings:/app/counterparty/core/settings/:rw
     networks:
       local_network:
         ipv4_address: ${NETWORK_IP_APP}
@@ -47,28 +47,27 @@ services:
     ports:
       - "${DATABASE_PORT}:${DATABASE_PORT}"
     volumes:
-      - counterparty-psql:/var/lib/postgresql/data/
-    command: [ "psql", "-U", "${DATABASE_USER}", "-p", "${DATABASE_PORT}" ]
+      - source: /data/counterparty-psql
+        target: /var/lib/postgresql/data
+        read_only: false
+        type: bind
+        bind:
+          create_host_path: true
+      - type: tmpfs
+        target: /var/run/postgresql
+        read_only: false
+    command: [ "psql", "-U", "${DATABASE_USER}", "-h", "${DATABASE_HOST}", "-p", "${DATABASE_PORT}" ]
     healthcheck:
       test: [ 'CMD-SHELL', 'pg_isready -U ${DATABASE_USER}' ]
-      interval: 1s
+      interval: 10s
       timeout: 5s
       retries: 5
     restart: unless-stopped
     tty: true
     stdin_open: true
 
-volumes:
-  counterparty-psql:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind,rw'
-      device: '/data/counterparty-psql'
-    labels:
-      com.docker.volume.permission: "775"
-
 networks:
+
   local_network:
     driver: macvlan
     driver_opts:
