@@ -37,7 +37,6 @@ services:
       - POSTGRES_INITDB_ARGS='--data-checksums --locale-provider=icu --icu-locale=ru-RU'
       - LANG=ru_RU.utf8
       - LANGUAGE=ru_RU.UTF-8
-      - LC_ALL=ru_RU.UTF-8
       - LC_COLLATE=ru_RU.UTF-8
       - LC_CTYPE=ru_RU.UTF-8
       - TZ=Europe/Moscow
