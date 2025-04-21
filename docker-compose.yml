@@ -12,7 +12,7 @@ services:
         ipv4_address: ${NETWORK_IP_APP}
     ports:
       - '8000:8000'
-    command: '/app/counterparty/entrypoint-app.sh'
+    command: '/app/counterparty/docker-entrypoint-app.sh'
     healthcheck:
       test: [ 'CMD', 'curl --fail http://localhost:8000/ || exit 1' ]
       interval: 10s
