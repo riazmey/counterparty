@@ -3,7 +3,7 @@ services:
   counterparty-app:
     container_name: counterparty-app
     hostname: 'counterparty-app.${NETWORK_DOMAINNAME}'
-    image: riazmey/counterparty:latest
+    image: riazmey/counterparty-app:latest
     build:
       context: .
     volumes:
@@ -14,7 +14,7 @@ services:
         ipv4_address: ${NETWORK_IP_APP}
     ports:
       - '8000:8000'
-    command: '/app/counterparty/docker-entrypoint.sh'
+    command: '/app/counterparty/entrypoint-app.sh'
     healthcheck:
       test: [ 'CMD', 'curl --fail http://localhost:8000/ || exit 1' ]
       interval: 10s
@@ -27,20 +27,20 @@ services:
   counterparty-psql:
     container_name: counterparty-psql
     hostname: 'counterparty-psql.${NETWORK_DOMAINNAME}'
-    image: postgres:latest
+    image: riazmey/counterparty-psql:latest
     shm_size: 128mb
     environment:
       - POSTGRES_DB=${DATABASE_DB}
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - PGDATA=/var/lib/postgresql/data/pgdata
-      - POSTGRES_INITDB_ARGS='--data-checksums --locale-provider=icu --icu-locale=ru-RU'
-      - LANG=ru_RU.UTF-8
-      - LANGUAGE=ru_RU.UTF-8
-      - LC_COLLATE=ru_RU.UTF-8
-      - LC_CTYPE=ru_RU.UTF-8
-      - LC_ALL=ru_RU.UTF-8
-      - TZ=Europe/Moscow
+#      - POSTGRES_INITDB_ARGS='--data-checksums --locale-provider=icu --icu-locale=ru-RU'
+#      - LANG=ru_RU.UTF-8
+#      - LANGUAGE=ru_RU.UTF-8
+#      - LC_COLLATE=ru_RU.UTF-8
+#      - LC_CTYPE=ru_RU.UTF-8
+#      - LC_ALL=ru_RU.UTF-8
+#      - TZ=Europe/Moscow
     networks:
       local_network:
         ipv4_address: ${NETWORK_IP_PSQL}
@@ -56,6 +56,7 @@ services:
       - type: tmpfs
         target: /var/run/postgresql
         read_only: false
+    command: [ "psql", "-U", "${DATABASE_USER}", "-h", "${DATABASE_HOST}", "-p", "${DATABASE_PORT}" ]
     healthcheck:
       test: [ 'CMD-SHELL', 'pg_isready -U ${DATABASE_USER}' ]
       interval: 10s
