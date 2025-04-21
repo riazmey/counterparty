@@ -48,3 +48,9 @@ DATABASES = {
         'PORT': getenv('DATABASE_PORT', '5432')
     }
 }
+
+if DEBUG:
+    print('counterparty.settings.environ:')
+    print(f' SECRET_KEY: ${SECRET_KEY}')
+    print(f' ALLOWED_HOSTS: ${ALLOWED_HOSTS}')
+    print(f' DATABASES: ${DATABASES}')
