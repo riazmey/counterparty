@@ -4,8 +4,6 @@ services:
     container_name: counterparty-app
     hostname: 'counterparty-app.${NETWORK_DOMAINNAME}'
     image: riazmey/counterparty-app:latest
-    build:
-      context: .
     volumes:
       - /data/counterparty-app/migrations:/app/counterparty/app/migrations/:rw
       - /data/counterparty-app/settings:/app/counterparty/core/settings/:rw
@@ -34,13 +32,13 @@ services:
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - PGDATA=/var/lib/postgresql/data/pgdata
-#      - POSTGRES_INITDB_ARGS='--data-checksums --locale-provider=icu --icu-locale=ru-RU'
-#      - LANG=ru_RU.UTF-8
-#      - LANGUAGE=ru_RU.UTF-8
-#      - LC_COLLATE=ru_RU.UTF-8
-#      - LC_CTYPE=ru_RU.UTF-8
-#      - LC_ALL=ru_RU.UTF-8
-#      - TZ=Europe/Moscow
+    #      - POSTGRES_INITDB_ARGS='--data-checksums --locale-provider=icu --icu-locale=ru-RU'
+    #      - LANG=ru_RU.UTF-8
+    #      - LANGUAGE=ru_RU.UTF-8
+    #      - LC_COLLATE=ru_RU.UTF-8
+    #      - LC_CTYPE=ru_RU.UTF-8
+    #      - LC_ALL=ru_RU.UTF-8
+    #      - TZ=Europe/Moscow
     networks:
       local_network:
         ipv4_address: ${NETWORK_IP_PSQL}
