@@ -6,7 +6,7 @@ try:
 except ImportError:
     from environ import *
 
-print('Debug view environments vars')
+print('Debug view environments vars:')
 if DEBUG:
     print(f'    SECRET_KEY: {SECRET_KEY}')
     print(f'    DEBUG: {DEBUG}')
